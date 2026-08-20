@@ -1,0 +1,15 @@
+{
+  "name": "discord-bot-embeds-giveaways",
+  "version": "1.0.0",
+  "description": "Bot de Discord con embeds, anuncios, giveaways, comandos personalizados y help",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "deploy": "node deploy-commands.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "express": "^4.19.2"
+  }
+}
