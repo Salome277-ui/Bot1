@@ -39,6 +39,10 @@ const messageCreate = require('./events/messageCreate');
 
 client.once('ready', () => {
     console.log(`✅ Bot conectado como ${client.user.tag}`);
+    client.user.setPresence({
+        activities: [{ name: 'Siendo el bot mas pro del mundo', type: 0 }],
+        status: 'online'
+    });
 });
 
 client.on('interactionCreate', interaction => interactionCreate(client, interaction));
