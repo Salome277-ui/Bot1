@@ -1,7 +1,9 @@
+cat > /home/claude/discord-bot/events/interactionCreate.js << 'ENDOFFILE'
 const { EmbedBuilder } = require('discord.js');
 const {
     buildEmbedModal,
-    buildGiveawayModal
+    buildGiveawayModal,
+    buildEatOrLeaveModal
 } = require('../interfaces/modals');
 const { getGiveaways, saveGiveaways } = require('../data/storage');
 const {
@@ -12,7 +14,6 @@ const {
     ZAPE_EMOJI,
     GAME_CHOICES,
     GAME_EMOJIS
-} = require('../data/constants');
 
 function isValidHexColor(value) {
     return /^#?[0-9A-Fa-f]{6}$/.test(value);
@@ -28,6 +29,10 @@ module.exports = async function interactionCreate(client, interaction) {
         if (interaction.isChatInputCommand()) {
             const command = client.commands.get(interaction.commandName);
             if (!command) return;
+
+                });
+            }
+
             return command.execute(interaction, client);
         }
 
@@ -146,6 +151,17 @@ module.exports = async function interactionCreate(client, interaction) {
                     );
 
                 return interaction.update({ embeds: [resultEmbed], components: [] });
+            }
+
+            // --- Eat or Leave: confirmación ---
+            if (customId === 'eatleave_confirmar') {
+                return interaction.showModal(buildEatOrLeaveModal());
+            }
+            if (customId === 'eatleave_cancelar') {
+                return interaction.update({
+                    content: 'Creación de Eat or Leave cancelada.',
+                    components: []
+                });
             }
 
             return;
@@ -283,6 +299,24 @@ module.exports = async function interactionCreate(client, interaction) {
                     ephemeral: true
                 });
             }
+
+            // --- Eat or Leave ---
+            if (customId === 'eatleave_modal') {
+                const desc = interaction.fields.getTextInputValue('eatleave_desc');
+
+                const embed = new EmbedBuilder()
+                    .setTitle('🍽️ Eat or Leave')
+                    .setDescription(desc)
+                    .setColor(PASTEL_RED);
+
+                await interaction.reply({ embeds: [embed] });
+
+                const sentMessage = await interaction.fetchReply();
+                await sentMessage.react('🇪');
+                await sentMessage.react('🇱');
+
+                return;
+            }
         }
     } catch (error) {
         console.error('Error manejando la interacción:', error);
@@ -293,3 +327,5 @@ module.exports = async function interactionCreate(client, interaction) {
         }
     }
 };
+ENDOFFILE
+echo OK
