@@ -4,6 +4,7 @@ const path = require('path');
 const GIVEAWAYS_FILE = path.join(__dirname, 'giveaways.json');
 const CUSTOM_FILE = path.join(__dirname, 'customcommands.json');
 const WARNS_FILE = path.join(__dirname, 'warns.json');
+const ADMINS_FILE = path.join(__dirname, 'admins.json');
 
 function loadJSON(file) {
     if (!fs.existsSync(file)) return {};
@@ -26,5 +27,7 @@ module.exports = {
     getCustomCommands: () => loadJSON(CUSTOM_FILE),
     saveCustomCommands: (data) => saveJSON(CUSTOM_FILE, data),
     getWarns: () => loadJSON(WARNS_FILE),
-    saveWarns: (data) => saveJSON(WARNS_FILE, data)
+    saveWarns: (data) => saveJSON(WARNS_FILE, data),
+    getAdmins: () => loadJSON(ADMINS_FILE),
+    saveAdmins: (data) => saveJSON(ADMINS_FILE, data)
 };
