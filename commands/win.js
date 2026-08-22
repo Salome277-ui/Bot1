@@ -3,6 +3,7 @@ const { getGiveaways, saveGiveaways } = require('../data/storage');
 const { GIVEAWAY_EMOJI } = require('../data/constants');
 
 module.exports = {
+    adminOnly: true,
     data: new SlashCommandBuilder()
         .setName('win')
         .setDescription('Elige un ganador al azar de un giveaway')
