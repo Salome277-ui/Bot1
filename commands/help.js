@@ -15,6 +15,9 @@ const COMMANDS_INFO = [
     { name: '/8ball', desc: 'Hazle una pregunta a la bola 8.' },
     { name: '/warn', desc: 'Da un warn a un usuario con una razón.' },
     { name: '/game', desc: 'Juega piedra, papel o tijera contra el bot.' },
+    { name: '/add-admin', desc: '(Admin) Da permiso a alguien para usar los comandos de administrador.' },
+    { name: '/eat-or-leave', desc: '(Admin) Crea una votación Eat or Leave con reacciones E y L.' },
+    { name: '/lock-channel', desc: '(Admin) Bloquea el canal actual para que nadie escriba.' },
     { name: '/help', desc: 'Muestra esta lista de comandos.' }
 ];
 
