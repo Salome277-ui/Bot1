@@ -1,4 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { PASTEL_RED } = require('../data/constants');
 
 module.exports = {
     adminOnly: true,
@@ -25,10 +26,12 @@ module.exports = {
                 await channel.setName(newName);
             }
 
-            await interaction.reply({
-                content: '🔒 Canal bloqueado correctamente. Nadie podrá escribir, enviar archivos ni crear hilos.',
-                ephemeral: true
-            });
+            const embed = new EmbedBuilder()
+                .setColor(PASTEL_RED)
+                .setTitle('🔒 Canal cerrado')
+                .setDescription('Nadie podrá escribir, enviar archivos ni crear hilos en este canal.');
+
+            await interaction.reply({ embeds: [embed] });
         } catch (error) {
             console.error('Error bloqueando el canal:', error);
             await interaction.reply({
