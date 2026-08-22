@@ -8,10 +8,11 @@ require('./keepalive');
 
 const fs = require('fs');
 const path = require('path');
-const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, Partials, REST, Routes } = require('discord.js');
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+const GUILD_ID = process.env.DISCORD_GUILD_ID || '';
 
 const client = new Client({
     intents: [
@@ -40,12 +41,30 @@ const interactionCreate = require('./events/interactionCreate');
 const messageCreate = require('./events/messageCreate');
 const messageReactionAdd = require('./events/messageReactionAdd');
 
-client.once('ready', () => {
+// Registrar automáticamente los comandos slash cada vez que el bot arranca
+async function registerCommands() {
+    try {
+        const commands = client.commands.map(command => command.data.toJSON());
+        const rest = new REST({ version: '10' }).setToken(TOKEN);
+
+        const route = GUILD_ID
+            ? Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID)
+            : Routes.applicationCommands(CLIENT_ID);
+
+        await rest.put(route, { body: commands });
+        console.log(`✅ ${commands.length} comandos registrados automáticamente.`);
+    } catch (error) {
+        console.error('❌ Error registrando comandos automáticamente:', error);
+    }
+}
+
+client.once('ready', async () => {
     console.log(`✅ Bot conectado como ${client.user.tag}`);
     client.user.setPresence({
         activities: [{ name: 'Siendo el bot mas pro del mundo', type: 0 }],
         status: 'online'
     });
+    await registerCommands();
 });
 
 client.on('interactionCreate', interaction => interactionCreate(client, interaction));
