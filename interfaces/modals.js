@@ -155,9 +155,26 @@ function buildPersonalizadoModal() {
     return modal;
 }
 
+function buildEatOrLeaveModal() {
+    const modal = new ModalBuilder()
+        .setCustomId('eatleave_modal')
+        .setTitle('Crear Eat or Leave');
+
+    const desc = new TextInputBuilder()
+        .setCustomId('eatleave_desc')
+        .setLabel('Descripción')
+        .setStyle(TextInputStyle.Paragraph)
+        .setRequired(true);
+
+    modal.addComponents(new ActionRowBuilder().addComponents(desc));
+
+    return modal;
+}
+
 module.exports = {
     buildEmbedModal,
     buildAnuncioModal,
     buildGiveawayModal,
-    buildPersonalizadoModal
+    buildPersonalizadoModal,
+    buildEatOrLeaveModal
 };
