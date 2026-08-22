@@ -6,6 +6,7 @@ const {
 } = require('discord.js');
 
 module.exports = {
+    adminOnly: true,
     data: new SlashCommandBuilder()
         .setName('giveaway')
         .setDescription('Crea un giveaway'),
