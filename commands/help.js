@@ -18,6 +18,7 @@ const COMMANDS_INFO = [
     { name: '/add-admin', desc: '(Admin) Da permiso a alguien para usar los comandos de administrador.' },
     { name: '/eat-or-leave', desc: '(Admin) Crea una votación Eat or Leave con reacciones E y L.' },
     { name: '/lock-channel', desc: '(Admin) Bloquea el canal actual para que nadie escriba.' },
+    { name: '/unlock-channel', desc: '(Admin) Vuelve a abrir un canal bloqueado.' },
     { name: '/help', desc: 'Muestra esta lista de comandos.' }
 ];
 
