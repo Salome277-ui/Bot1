@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
+    adminOnly: true,
     data: new SlashCommandBuilder()
         .setName('anuncio')
         .setDescription('Envía un anuncio a un canal'),
