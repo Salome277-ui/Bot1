@@ -1,4 +1,3 @@
-cat > /home/claude/discord-bot/events/interactionCreate.js << 'ENDOFFILE'
 const { EmbedBuilder } = require('discord.js');
 const {
     buildEmbedModal,
@@ -14,6 +13,8 @@ const {
     ZAPE_EMOJI,
     GAME_CHOICES,
     GAME_EMOJIS
+} = require('../data/constants');
+const { isBotAdmin } = require('../utils/permissions');
 
 function isValidHexColor(value) {
     return /^#?[0-9A-Fa-f]{6}$/.test(value);
@@ -30,6 +31,10 @@ module.exports = async function interactionCreate(client, interaction) {
             const command = client.commands.get(interaction.commandName);
             if (!command) return;
 
+            if (command.adminOnly && !isBotAdmin(interaction)) {
+                return interaction.reply({
+                    content: 'No tienes permiso para usar este comando. Pídele a un administrador que te agregue con /add-admin.',
+                    ephemeral: true
                 });
             }
 
@@ -166,7 +171,6 @@ module.exports = async function interactionCreate(client, interaction) {
 
             return;
         }
-
         // ----- MODALES -----
         if (interaction.isModalSubmit()) {
             const { customId } = interaction;
@@ -327,5 +331,3 @@ module.exports = async function interactionCreate(client, interaction) {
         }
     }
 };
-ENDOFFILE
-echo OK
