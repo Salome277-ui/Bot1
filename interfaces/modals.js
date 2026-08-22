@@ -166,7 +166,16 @@ function buildEatOrLeaveModal() {
         .setStyle(TextInputStyle.Paragraph)
         .setRequired(true);
 
-    modal.addComponents(new ActionRowBuilder().addComponents(desc));
+    const image = new TextInputBuilder()
+        .setCustomId('eatleave_image')
+        .setLabel('URL de imagen (opcional)')
+        .setStyle(TextInputStyle.Short)
+        .setRequired(false);
+
+    modal.addComponents(
+        new ActionRowBuilder().addComponents(desc),
+        new ActionRowBuilder().addComponents(image)
+    );
 
     return modal;
 }
