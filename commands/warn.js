@@ -3,6 +3,7 @@ const { getWarns, saveWarns } = require('../data/storage');
 const { PASTEL_RED, WARN_EMOJI } = require('../data/constants');
 
 module.exports = {
+    adminOnly: true,
     data: new SlashCommandBuilder()
         .setName('warn')
         .setDescription('Da un warn a un usuario')
