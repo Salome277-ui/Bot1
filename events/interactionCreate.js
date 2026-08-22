@@ -307,11 +307,14 @@ module.exports = async function interactionCreate(client, interaction) {
             // --- Eat or Leave ---
             if (customId === 'eatleave_modal') {
                 const desc = interaction.fields.getTextInputValue('eatleave_desc');
+                const image = interaction.fields.getTextInputValue('eatleave_image');
 
                 const embed = new EmbedBuilder()
                     .setTitle('🍽️ Eat or Leave')
                     .setDescription(desc)
                     .setColor(PASTEL_RED);
+
+                if (image) embed.setImage(image);
 
                 await interaction.reply({ embeds: [embed] });
 
@@ -321,7 +324,9 @@ module.exports = async function interactionCreate(client, interaction) {
 
                 return;
             }
-        }
+            
+            }
+        
     } catch (error) {
         console.error('Error manejando la interacción:', error);
         if (interaction.isRepliable() && !interaction.replied && !interaction.deferred) {
