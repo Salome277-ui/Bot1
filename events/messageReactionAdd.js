@@ -1,4 +1,4 @@
-const ALLOWED_EMOJIS = ['🇪', '🇱'];
+const ALLOWED_EMOJIS = ['❌', '🇱'];
 
 module.exports = async function messageReactionAdd(client, reaction, user) {
     try {
