@@ -19,6 +19,7 @@ const COMMANDS_INFO = [
     { name: '/eat-or-leave', desc: '(Admin) Crea una votación Eat or Leave con reacciones E y L.' },
     { name: '/lock-channel', desc: '(Admin) Bloquea el canal actual para que nadie escriba.' },
     { name: '/unlock-channel', desc: '(Admin) Vuelve a abrir un canal bloqueado.' },
+    { name: '/set-count', desc: '(Admin) Configura el canal donde se hará el conteo (1, 2, 3...).' },
     { name: '/help', desc: 'Muestra esta lista de comandos.' }
 ];
 
