@@ -107,6 +107,23 @@ module.exports = async function messageCreate(client, message) {
             return;
         }
 
+        // La misma persona no puede contar dos números seguidos
+        if (guildCounting.lastUserId === message.author.id) {
+            await message.react('❌');
+
+            const embed = new EmbedBuilder()
+                .setColor(PASTEL_RED)
+                .setDescription(`<@${message.author.id}> ha arruinado el conteo por contar dos veces seguidas :(`);
+
+            await message.channel.send({ embeds: [embed] });
+
+            guildCounting.count = 0;
+            guildCounting.lastUserId = null;
+            counting[message.guildId] = guildCounting;
+            saveCounting(counting);
+            return;
+        }
+
         if (number === expected) {
             // Número correcto
             if (number === 100) {
@@ -119,6 +136,7 @@ module.exports = async function messageCreate(client, message) {
             }
 
             guildCounting.count = number;
+            guildCounting.lastUserId = message.author.id;
             counting[message.guildId] = guildCounting;
             saveCounting(counting);
         } else {
@@ -132,6 +150,7 @@ module.exports = async function messageCreate(client, message) {
             await message.channel.send({ embeds: [embed] });
 
             guildCounting.count = 0;
+            guildCounting.lastUserId = null;
             counting[message.guildId] = guildCounting;
             saveCounting(counting);
         }
