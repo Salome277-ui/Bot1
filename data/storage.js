@@ -5,6 +5,7 @@ const GIVEAWAYS_FILE = path.join(__dirname, 'giveaways.json');
 const CUSTOM_FILE = path.join(__dirname, 'customcommands.json');
 const WARNS_FILE = path.join(__dirname, 'warns.json');
 const ADMINS_FILE = path.join(__dirname, 'admins.json');
+const COUNTING_FILE = path.join(__dirname, 'counting.json');
 
 function loadJSON(file) {
     if (!fs.existsSync(file)) return {};
@@ -29,5 +30,7 @@ module.exports = {
     getWarns: () => loadJSON(WARNS_FILE),
     saveWarns: (data) => saveJSON(WARNS_FILE, data),
     getAdmins: () => loadJSON(ADMINS_FILE),
-    saveAdmins: (data) => saveJSON(ADMINS_FILE, data)
+    saveAdmins: (data) => saveJSON(ADMINS_FILE, data),
+    getCounting: () => loadJSON(COUNTING_FILE),
+    saveCounting: (data) => saveJSON(COUNTING_FILE, data)
 };
