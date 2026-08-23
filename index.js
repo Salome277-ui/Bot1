@@ -8,7 +8,7 @@ require('./keepalive');
 
 const fs = require('fs');
 const path = require('path');
-const { Client, GatewayIntentBits, Collection, Partials, REST, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, Partials, REST, Routes, ActivityType } = require('discord.js');
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
@@ -61,7 +61,17 @@ async function registerCommands() {
 client.once('ready', async () => {
     console.log(`✅ Bot conectado como ${client.user.tag}`);
     client.user.setPresence({
-        activities: [{ name: 'Siendo el bot mas pro del mundo', type: 0 }],
+        activities: [
+            {
+                name: 'Jugando Animal Hospital',
+                type: ActivityType.Playing
+            },
+            {
+                name: 'Custom Status',
+                state: 'El mejor bot de animal hospital 🏥',
+                type: ActivityType.Custom
+            }
+        ],
         status: 'online'
     });
     await registerCommands();
