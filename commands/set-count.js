@@ -20,7 +20,8 @@ module.exports = {
 
         counting[interaction.guildId] = {
             channelId: channel.id,
-            count: 0
+            count: 0,
+            lastUserId: null
         };
         saveCounting(counting);
 
