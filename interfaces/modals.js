@@ -133,6 +133,12 @@ function buildPersonalizadoModal() {
         .setLabel('Texto que activa el comando')
         .setStyle(TextInputStyle.Short)
         .setRequired(true);
+    
+    const title = new TextInputBuilder()
+        .setCustomId('personalizado_title')
+        .setLabel('Título')
+        .setStyle(TextInputStyle.Short)
+        .setRequired(false);
 
     const desc = new TextInputBuilder()
         .setCustomId('personalizado_desc')
