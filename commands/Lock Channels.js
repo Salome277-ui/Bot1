@@ -1,18 +1,16 @@
-const {
-    SlashCommandBuilder,
-    EmbedBuilder,
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle
-} = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('Lock Channels')
-        .setDescription('Bloques todos los canales'),
+        .setName('lock-channels')
+        .setDescription('Bloquea todos los canales'),
 
     async execute(interaction) {
         const embed = new EmbedBuilder()
-            .setColor('#5865F2')
-            .setTitle('Lock channels')
+            .setColor('#FF9E9E')
+            .setTitle('PRUEBA')
             .setDescription('Aun trabajando en ello');
+
+        await interaction.reply({ embeds: [embed] });
+    }
+};
