@@ -136,7 +136,7 @@ function buildPersonalizadoModal() {
     
     const title = new TextInputBuilder()
         .setCustomId('personalizado_title')
-        .setLabel('Título')
+        .setLabel('Título (no obligatorio)')
         .setStyle(TextInputStyle.Short)
         .setRequired(false);
 
