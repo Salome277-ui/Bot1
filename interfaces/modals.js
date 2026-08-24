@@ -134,12 +134,6 @@ function buildPersonalizadoModal() {
         .setStyle(TextInputStyle.Short)
         .setRequired(true);
 
-    const title = new TextInputBuilder()
-        .setCustomId('personalizado_title')
-        .setLabel('Título')
-        .setStyle(TextInputStyle.Short)
-        .setRequired(true);
-
     const desc = new TextInputBuilder()
         .setCustomId('personalizado_desc')
         .setLabel('Descripción')
