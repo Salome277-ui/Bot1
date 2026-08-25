@@ -1,0 +1,5 @@
+rm -f /home/claude/discord-bot/data/db.js
+cat > /home/claude/discord-bot/data/autoroles.json << 'EOF'
+{}
+EOF
+echo OK
