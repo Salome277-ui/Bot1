@@ -133,12 +133,6 @@ function buildPersonalizadoModal() {
         .setLabel('Texto que activa el comando')
         .setStyle(TextInputStyle.Short)
         .setRequired(true);
-    
-    const title = new TextInputBuilder()
-        .setCustomId('personalizado_title')
-        .setLabel('Título (no obligatorio)')
-        .setStyle(TextInputStyle.Short)
-        .setRequired(false);
 
     const desc = new TextInputBuilder()
         .setCustomId('personalizado_desc')
@@ -148,7 +142,6 @@ function buildPersonalizadoModal() {
 
     modal.addComponents(
         new ActionRowBuilder().addComponents(trigger),
-        new ActionRowBuilder().addComponents(title),
         new ActionRowBuilder().addComponents(desc)
     );
 
@@ -180,10 +173,55 @@ function buildEatOrLeaveModal() {
     return modal;
 }
 
+function buildAutoRolesModal() {
+    const modal = new ModalBuilder()
+        .setCustomId('autoroles_modal')
+        .setTitle('Crear Auto-Roles');
+
+    const desc = new TextInputBuilder()
+        .setCustomId('autoroles_desc')
+        .setLabel('Descripción')
+        .setStyle(TextInputStyle.Paragraph)
+        .setRequired(true);
+
+    modal.addComponents(new ActionRowBuilder().addComponents(desc));
+
+    return modal;
+}
+
+function buildAutoRoleAddModal(messageId) {
+    const modal = new ModalBuilder()
+        .setCustomId(`autorole_add_modal_${messageId}`)
+        .setTitle('Agregar botón de rol');
+
+    const emoji = new TextInputBuilder()
+        .setCustomId('autorole_emoji')
+        .setLabel('Emoji para el botón')
+        .setStyle(TextInputStyle.Short)
+        .setRequired(true)
+        .setPlaceholder('🎮');
+
+    const role = new TextInputBuilder()
+        .setCustomId('autorole_role')
+        .setLabel('Rol (menciona el rol o pega su ID)')
+        .setStyle(TextInputStyle.Short)
+        .setRequired(true)
+        .setPlaceholder('@Rol o 1234567890123456');
+
+    modal.addComponents(
+        new ActionRowBuilder().addComponents(emoji),
+        new ActionRowBuilder().addComponents(role)
+    );
+
+    return modal;
+}
+
 module.exports = {
     buildEmbedModal,
     buildAnuncioModal,
     buildGiveawayModal,
     buildPersonalizadoModal,
-    buildEatOrLeaveModal
+    buildEatOrLeaveModal,
+    buildAutoRolesModal,
+    buildAutoRoleAddModal
 };
