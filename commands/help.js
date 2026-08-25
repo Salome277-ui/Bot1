@@ -20,6 +20,10 @@ const COMMANDS_INFO = [
     { name: '/lock-channel', desc: '(Admin) Bloquea el canal actual para que nadie escriba.' },
     { name: '/unlock-channel', desc: '(Admin) Vuelve a abrir un canal bloqueado.' },
     { name: '/set-count', desc: '(Admin) Configura el canal donde se hará el conteo (1, 2, 3...).' },
+    { name: '/role-add', desc: '(Admin) Le da un rol a un miembro.' },
+    { name: '/auto-roles', desc: '(Admin) Crea un mensaje de auto-roles con botones (máx. 5).' },
+    { name: '/lock-channels', desc: '(Admin) Bloquea TODOS los canales de texto.' },
+    { name: '/unlock-channels', desc: '(Admin) Desbloquea TODOS los canales de texto.' },
     { name: '/help', desc: 'Muestra esta lista de comandos.' }
 ];
 
