@@ -165,7 +165,6 @@ module.exports = async function messageCreate(client, message) {
     if (!command) return;
 
     const embed = new EmbedBuilder()
-        .setTitle(command.title)
         .setDescription(command.description)
         .setColor('#5865F2');
 
