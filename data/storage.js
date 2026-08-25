@@ -1,3 +1,4 @@
+cat > /home/claude/discord-bot/data/storage.js << 'ENDOFFILE'
 const fs = require('fs');
 const path = require('path');
 
@@ -6,6 +7,7 @@ const CUSTOM_FILE = path.join(__dirname, 'customcommands.json');
 const WARNS_FILE = path.join(__dirname, 'warns.json');
 const ADMINS_FILE = path.join(__dirname, 'admins.json');
 const COUNTING_FILE = path.join(__dirname, 'counting.json');
+const AUTOROLES_FILE = path.join(__dirname, 'autoroles.json');
 
 function loadJSON(file) {
     if (!fs.existsSync(file)) return {};
@@ -32,5 +34,9 @@ module.exports = {
     getAdmins: () => loadJSON(ADMINS_FILE),
     saveAdmins: (data) => saveJSON(ADMINS_FILE, data),
     getCounting: () => loadJSON(COUNTING_FILE),
-    saveCounting: (data) => saveJSON(COUNTING_FILE, data)
+    saveCounting: (data) => saveJSON(COUNTING_FILE, data),
+    getAutoRoles: () => loadJSON(AUTOROLES_FILE),
+    saveAutoRoles: (data) => saveJSON(AUTOROLES_FILE, data)
 };
+ENDOFFILE
+node --check /home/claude/discord-bot/data/storage.js && echo "Sintaxis OK"
