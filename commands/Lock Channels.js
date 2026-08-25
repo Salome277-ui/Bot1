@@ -1,16 +1,42 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ChannelType } = require('discord.js');
+const { PASTEL_RED } = require('../data/constants');
 
 module.exports = {
+    adminOnly: true,
     data: new SlashCommandBuilder()
         .setName('lock-channels')
-        .setDescription('Bloquea todos los canales'),
+        .setDescription('Bloquea TODOS los canales de texto del servidor'),
 
     async execute(interaction) {
-        const embed = new EmbedBuilder()
-            .setColor('#FF9E9E')
-            .setTitle('PRUEBA')
-            .setDescription('Aun trabajando en ello');
+        await interaction.deferReply();
 
-        await interaction.reply({ embeds: [embed] });
+        const everyoneRole = interaction.guild.roles.everyone;
+        const textChannels = interaction.guild.channels.cache.filter(
+            channel => channel.type === ChannelType.GuildText
+        );
+
+        for (const channel of textChannels.values()) {
+            try {
+                await channel.permissionOverwrites.edit(everyoneRole, {
+                    SendMessages: false,
+                    SendMessagesInThreads: false,
+                    CreatePublicThreads: false,
+                    CreatePrivateThreads: false,
+                    AttachFiles: false
+                });
+
+                if (!channel.name.startsWith('nurse-lock-')) {
+                    await channel.setName(`nurse-lock-${channel.name}`);
+                }
+            } catch (error) {
+                console.error(`No se pudo bloquear el canal ${channel.name}:`, error);
+            }
+        }
+
+        const embed = new EmbedBuilder()
+            .setColor(PASTEL_RED)
+            .setDescription('🔒Todos los canales han sido bloqueado!!');
+
+        await interaction.editReply({ embeds: [embed] });
     }
 };
