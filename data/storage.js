@@ -1,4 +1,3 @@
-cat > /home/claude/discord-bot/data/storage.js << 'ENDOFFILE'
 const fs = require('fs');
 const path = require('path');
 
@@ -38,5 +37,3 @@ module.exports = {
     getAutoRoles: () => loadJSON(AUTOROLES_FILE),
     saveAutoRoles: (data) => saveJSON(AUTOROLES_FILE, data)
 };
-ENDOFFILE
-node --check /home/claude/discord-bot/data/storage.js && echo "Sintaxis OK"
