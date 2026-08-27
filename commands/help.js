@@ -27,26 +27,31 @@ const COMMANDS_INFO = [
     { name: '/help', desc: 'Muestra esta lista de comandos.' }
 ];
 
+function buildHelpEmbed() {
+    return new EmbedBuilder()
+        .setTitle('📖 Lista de comandos')
+        .setColor('#5865F2')
+        .setDescription(
+            COMMANDS_INFO.map(
+                c => `${randomEmoji()} **${c.name}** — ${c.desc}`
+            ).join('\n\n')
+        )
+        .addFields({
+            name: '🎨 Colores para copiar y pegar',
+            value: COLORS.map(c => `**${c.name}:** \`${c.hex}\``).join('\n')
+        })
+        .setFooter({ text: 'Usa "/" para ver la lista de comandos en cualquier momento' });
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('help')
         .setDescription('Muestra todos los comandos disponibles'),
 
     async execute(interaction) {
-        const embed = new EmbedBuilder()
-            .setTitle('📖 Lista de comandos')
-            .setColor('#5865F2')
-            .setDescription(
-                COMMANDS_INFO.map(
-                    c => `${randomEmoji()} **${c.name}** — ${c.desc}`
-                ).join('\n\n')
-            )
-            .addFields({
-                name: '🎨 Colores para copiar y pegar',
-                value: COLORS.map(c => `**${c.name}:** \`${c.hex}\``).join('\n')
-            })
-            .setFooter({ text: 'Usa "/" para ver la lista de comandos en cualquier momento' });
-
+        const embed = buildHelpEmbed();
         await interaction.reply({ embeds: [embed] });
-    }
+    },
+
+    buildHelpEmbed
 };
