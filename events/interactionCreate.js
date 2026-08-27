@@ -392,7 +392,6 @@ module.exports = async function interactionCreate(client, interaction) {
                 const image = interaction.fields.getTextInputValue('eatleave_image');
 
                 const embed = new EmbedBuilder()
-                    .setTitle('🍽️ Eat or Leave')
                     .setDescription(desc)
                     .setColor(PASTEL_RED);
 
