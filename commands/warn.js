@@ -1,6 +1,6 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { getWarns, saveWarns } = require('../data/storage');
-const { PASTEL_RED, WARN_EMOJI } = require('../data/constants');
+const { SlashCommandBuilder } = require('discord.js');
+const { WARN_EMOJI } = require('../data/constants');
+const { applyWarn } = require('../utils/warnHelper');
 
 module.exports = {
     adminOnly: true,
@@ -23,22 +23,8 @@ module.exports = {
     async execute(interaction) {
         const target = interaction.options.getUser('usuario');
         const razon = interaction.options.getString('razon');
-        const guildId = interaction.guildId;
 
-        const warns = getWarns();
-        if (!warns[guildId]) warns[guildId] = {};
-        if (!warns[guildId][target.id]) warns[guildId][target.id] = 0;
-
-        warns[guildId][target.id] += 1;
-        saveWarns(warns);
-
-        const count = warns[guildId][target.id];
-
-        const embed = new EmbedBuilder()
-            .setColor(PASTEL_RED)
-            .setDescription(
-                `**Razon:** ${razon}\n\nhaz recibido ${count}/3 Warns`
-            );
+        const { embed } = await applyWarn(interaction.client, interaction.guild, target, razon);
 
         await interaction.reply({
             content: `<@${target.id}> haz recibido un warn ${WARN_EMOJI}`,
