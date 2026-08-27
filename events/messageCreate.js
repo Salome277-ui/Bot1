@@ -1,18 +1,25 @@
-const { EmbedBuilder } = require('discord.js');
+const {
+    EmbedBuilder,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle
+} = require('discord.js');
 const { getCustomCommands, getCounting, saveCounting } = require('../data/storage');
 const { isBotAdminMember } = require('../utils/permissions');
-const { PASTEL_RED, PASTEL_GREEN } = require('../data/constants');
+const { applyWarn } = require('../utils/warnHelper');
+const { PASTEL_RED, PASTEL_GREEN, WARN_EMOJI } = require('../data/constants');
 
 module.exports = async function messageCreate(client, message) {
     if (message.author.bot) return;
     if (!message.content) return;
     if (!message.guild) return;
 
-    const trigger = message.content.trim().toLowerCase();
+    const rawContent = message.content.trim();
+    const trigger = rawContent.toLowerCase();
 
     // --- "nurse lock" bloquea el canal actual (solo admins del bot) ---
     if (trigger === 'nurse lock') {
-        if (!isBotAdminMember(message.guildId, message.member)) {
+        if (!(await isBotAdminMember(message.guildId, message.member))) {
             return message.reply({
                 content: 'No tienes permiso para usar esto. Pídele a un administrador que te agregue con /add-admin.'
             });
@@ -54,7 +61,7 @@ module.exports = async function messageCreate(client, message) {
 
     // --- "nurse unlock" vuelve a abrir el canal actual (solo admins del bot) ---
     if (trigger === 'nurse unlock') {
-        if (!isBotAdminMember(message.guildId, message.member)) {
+        if (!(await isBotAdminMember(message.guildId, message.member))) {
             return message.reply({
                 content: 'No tienes permiso para usar esto. Pídele a un administrador que te agregue con /add-admin.'
             });
@@ -88,26 +95,88 @@ module.exports = async function messageCreate(client, message) {
         return;
     }
 
+    // --- "nurse game" abre el juego de piedra, papel o tijera ---
+    if (trigger === 'nurse game') {
+        const embed = new EmbedBuilder()
+            .setColor('#5865F2')
+            .setTitle('🎮 Piedra, Papel o Tijera')
+            .setDescription('Elige una opción para jugar contra mí:');
+
+        const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+                .setCustomId(`game_piedra_${message.author.id}`)
+                .setLabel('🪨 Piedra')
+                .setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder()
+                .setCustomId(`game_papel_${message.author.id}`)
+                .setLabel('📄 Papel')
+                .setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder()
+                .setCustomId(`game_tijera_${message.author.id}`)
+                .setLabel('✂️ Tijera')
+                .setStyle(ButtonStyle.Secondary)
+        );
+
+        await message.channel.send({ embeds: [embed], components: [row] });
+        return;
+    }
+
+    // --- "nurse help" muestra la lista de comandos ---
+    if (trigger === 'nurse help') {
+        const { buildHelpEmbed } = require('../commands/help');
+        const embed = buildHelpEmbed();
+        await message.channel.send({ embeds: [embed] });
+        return;
+    }
+
+    // --- "nurse warn @usuario razón" da un warn (solo admins del bot) ---
+    if (/^nurse warn\b/i.test(rawContent)) {
+        if (!(await isBotAdminMember(message.guildId, message.member))) {
+            return message.reply({
+                content: 'No tienes permiso para usar esto. Pídele a un administrador que te agregue con /add-admin.'
+            });
+        }
+
+        const targetMember = message.mentions.members?.first();
+        if (!targetMember) {
+            return message.reply({
+                content: 'Debes etiquetar al miembro que quieres advertir. Ejemplo: `nurse warn @Usuario spamea mucho`'
+            });
+        }
+
+        let reason = rawContent
+            .replace(/^nurse warn/i, '')
+            .replace(/<@!?\d+>/, '')
+            .trim();
+        if (!reason) reason = 'Sin razón especificada';
+
+        const { embed } = await applyWarn(client, message.guild, targetMember.user, reason);
+
+        await message.channel.send({
+            content: `<@${targetMember.id}> haz recibido un warn ${WARN_EMOJI}`,
+            embeds: [embed]
+        });
+
+        return;
+    }
+
     // --- Conteo (canal configurado con /set-count) ---
-    const counting = getCounting();
+    const counting = await getCounting();
     const guildCounting = counting[message.guildId];
 
     if (guildCounting && guildCounting.channelId === message.channelId) {
         const content = message.content.trim();
 
-        // Si no es un número puro, se ignora (no cuenta como error)
         if (!/^\d+$/.test(content)) return;
 
         const number = parseInt(content, 10);
         const expected = guildCounting.count + 1;
 
-        // El conteo está en 0 (recién reiniciado) y empiezan con un número que no es el 1
         if (guildCounting.count === 0 && number !== 1) {
             await message.react('⚠️');
             return;
         }
 
-        // La misma persona no puede contar dos números seguidos
         if (guildCounting.lastUserId === message.author.id) {
             await message.react('❌');
 
@@ -120,12 +189,11 @@ module.exports = async function messageCreate(client, message) {
             guildCounting.count = 0;
             guildCounting.lastUserId = null;
             counting[message.guildId] = guildCounting;
-            saveCounting(counting);
+            await saveCounting(counting);
             return;
         }
 
         if (number === expected) {
-            // Número correcto
             if (number === 100) {
                 await message.react('💯');
             } else if (number === 67) {
@@ -138,9 +206,8 @@ module.exports = async function messageCreate(client, message) {
             guildCounting.count = number;
             guildCounting.lastUserId = message.author.id;
             counting[message.guildId] = guildCounting;
-            saveCounting(counting);
+            await saveCounting(counting);
         } else {
-            // Número incorrecto, se arruinó el conteo
             await message.react('❌');
 
             const embed = new EmbedBuilder()
@@ -152,14 +219,14 @@ module.exports = async function messageCreate(client, message) {
             guildCounting.count = 0;
             guildCounting.lastUserId = null;
             counting[message.guildId] = guildCounting;
-            saveCounting(counting);
+            await saveCounting(counting);
         }
 
         return;
     }
 
     // --- Comandos personalizados creados con /personalizado ---
-    const customCommands = getCustomCommands();
+    const customCommands = await getCustomCommands();
     const command = customCommands[trigger];
 
     if (!command) return;
