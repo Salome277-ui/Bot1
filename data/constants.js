@@ -11,6 +11,7 @@ module.exports = {
     WARN_EMOJI: '<:22708:1539785452276686888>',
     PASTEL_RED: '#F5A9A9',
     PASTEL_GREEN: '#B5E8B5',
+    PASTEL_PINK: '#FFD1E8',
     ZAPE_GIF: 'https://cdn.discordapp.com/attachments/1533623497279144078/1539813148956172328/anime-slap_1.gif',
     EIGHTBALL_ANSWERS: ['Sí...', 'No...', 'Probablemente...', 'Probablemente no...'],
     GAME_CHOICES: ['piedra', 'papel', 'tijera'],
