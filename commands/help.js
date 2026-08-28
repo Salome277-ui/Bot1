@@ -24,6 +24,7 @@ const COMMANDS_INFO = [
     { name: '/auto-roles', desc: '(Admin) Crea un mensaje de auto-roles con botones (máx. 5).' },
     { name: '/lock-channels', desc: '(Admin) Bloquea TODOS los canales de texto.' },
     { name: '/unlock-channels', desc: '(Admin) Desbloquea TODOS los canales de texto.' },
+    { name: '/set-ticket', desc: '(Admin) Envía el panel de tickets a un canal.' },
     { name: '/help', desc: 'Muestra esta lista de comandos.' }
 ];
 
