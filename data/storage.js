@@ -7,6 +7,8 @@ const WARNS_FILE = path.join(__dirname, 'warns.json');
 const ADMINS_FILE = path.join(__dirname, 'admins.json');
 const COUNTING_FILE = path.join(__dirname, 'counting.json');
 const AUTOROLES_FILE = path.join(__dirname, 'autoroles.json');
+const TICKETS_FILE = path.join(__dirname, 'tickets.json');
+const TICKET_COUNTER_FILE = path.join(__dirname, 'ticketcounter.json');
 
 function loadJSON(file) {
     if (!fs.existsSync(file)) return {};
@@ -35,5 +37,9 @@ module.exports = {
     getCounting: () => loadJSON(COUNTING_FILE),
     saveCounting: (data) => saveJSON(COUNTING_FILE, data),
     getAutoRoles: () => loadJSON(AUTOROLES_FILE),
-    saveAutoRoles: (data) => saveJSON(AUTOROLES_FILE, data)
+    saveAutoRoles: (data) => saveJSON(AUTOROLES_FILE, data),
+    getTickets: () => loadJSON(TICKETS_FILE),
+    saveTickets: (data) => saveJSON(TICKETS_FILE, data),
+    getTicketCounter: () => loadJSON(TICKET_COUNTER_FILE),
+    saveTicketCounter: (data) => saveJSON(TICKET_COUNTER_FILE, data)
 };
