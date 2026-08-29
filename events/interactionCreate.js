@@ -221,12 +221,18 @@ module.exports = async function interactionCreate(client, interaction) {
                         ephemeral: true
                     });
                 }
+                
                 // --- Ticket: abrir uno nuevo ---
             if (customId.startsWith('ticket_open_')) {
+                try {
+                    await interaction.deferReply({ ephemeral: true });
+                } catch (error) {
+                    console.error('No pude confirmar la interacción a tiempo:', error);
+                    return;
+                }
+
                 const category = customId.replace('ticket_open_', '');
                 const { createTicketChannel } = require('../utils/ticketHelper');
-
-                await interaction.deferReply({ ephemeral: true });
 
                 let result;
                 try {
@@ -237,19 +243,6 @@ module.exports = async function interactionCreate(client, interaction) {
                         content: 'No pude crear tu ticket. Avísale a un administrador.'
                     });
                 }
-
-                const goRow = new ActionRowBuilder().addComponents(
-                    new ButtonBuilder()
-                        .setLabel('Ir al canal')
-                        .setStyle(ButtonStyle.Link)
-                        .setURL(`https://discord.com/channels/${interaction.guildId}/${result.channel.id}`)
-                );
-
-                return interaction.editReply({
-                    content: 'Tu ticket ha sido creado!!!',
-                    components: [goRow]
-                });
-            }
 
             // --- Ticket: cerrar ---
             if (customId === 'ticket_close') {
