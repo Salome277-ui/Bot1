@@ -211,8 +211,7 @@ module.exports = async function interactionCreate(client, interaction) {
                 });
             }
 
-            // --- Auto-roles: agregar botón nuevo ---
-            if (customId.startsWith('autorole_add_')) {
+            // --- Auto-roles: agregar botón nuevo ---if (customId.startsWith('autorole_add_')) {
                 const messageId = customId.replace('autorole_add_', '');
 
                 if (!(await isBotAdmin(interaction))) {
@@ -425,9 +424,7 @@ module.exports = async function interactionCreate(client, interaction) {
                 const embed = new EmbedBuilder()
                     .setTitle(title)
                     .setDescription(desc)
-                    .setColor('#FF0000');
-
-                if (image) embed.setImage(image);
+                    .setColor('#FF0000');if (image) embed.setImage(image);
 
                 await targetChannel.send({
                     content: `📢 ANUNCIO IMPORTANTE!!!! ${ANUNCIO_EMOJI}`,
@@ -523,4 +520,122 @@ module.exports = async function interactionCreate(client, interaction) {
 
             // --- Auto-roles: crear el mensaje base ---
             if (customId === 'autoroles_modal') {
-                const desc = interaction.
+                const desc = interaction.fields.getTextInputValue('autoroles_desc');
+
+                const embed = new EmbedBuilder()
+                    .setColor('#5865F2')
+                    .setTitle('🎭 Auto-Roles')
+                    .setDescription(desc);
+
+                await interaction.reply({ embeds: [embed] });
+                const sentMessage = await interaction.fetchReply();
+
+                const row = new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`autorole_add_${sentMessage.id}`)
+                        .setLabel('➕ Agregar botón de rol')
+                        .setStyle(ButtonStyle.Success)
+                );
+
+                await interaction.editReply({ components: [row] });
+
+                const autoRoles = await getAutoRoles();
+                autoRoles[sentMessage.id] = {
+                    guildId: interaction.guildId,
+                    channelId: interaction.channelId,
+                    description: desc,
+                    roles: []
+                };
+                await saveAutoRoles(autoRoles);
+
+                return;
+            }
+
+            // --- Auto-roles: agregar un botón de rol ---
+            if (customId.startsWith('autorole_add_modal_')) {
+                const messageId = customId.replace('autorole_add_modal_', '');
+                const emoji = interaction.fields.getTextInputValue('autorole_emoji').trim();
+                const roleText = interaction.fields.getTextInputValue('autorole_role').trim();
+
+                const roleId = extractRoleId(roleText);
+                if (!roleId) {
+                    return interaction.reply({
+                        content: 'No entendí el rol. Menciona el rol (@rol) o pega su ID.',
+                        ephemeral: true
+                    });
+                }
+
+                const role = interaction.guild.roles.cache.get(roleId);
+                if (!role) {
+                    return interaction.reply({
+                        content: 'No encontré ese rol en el servidor.',
+                        ephemeral: true
+                    });
+                }
+
+                const autoRoles = await getAutoRoles();
+                const config = autoRoles[messageId];
+
+                if (!config) {
+                    return interaction.reply({
+                        content: 'Este mensaje de auto-roles ya no está disponible.',
+                        ephemeral: true
+                    });
+                }
+
+                if (config.roles.length >= 5) {
+                    return interaction.reply({
+                        content: 'Ya se alcanzó el máximo de 5 botones.',
+                        ephemeral: true
+                    });
+                }
+
+                config.roles.push({ emoji, roleId: role.id, roleName: role.name });
+                autoRoles[messageId] = config;
+                await saveAutoRoles(autoRoles);
+
+                const rows = buildAutoRolesComponents(config);
+                if (config.roles.length < 5) {
+                    const lastRow = rows[rows.length - 1];
+                    if (lastRow && lastRow.components.length < 5) {
+                        lastRow.addComponents(
+                            new ButtonBuilder()
+                                .setCustomId(`autorole_add_${messageId}`)
+                                .setLabel('➕ Agregar botón de rol')
+                                .setStyle(ButtonStyle.Success)
+                        );
+                    } else {
+                        rows.push(
+                            new ActionRowBuilder().addComponents(
+                                new ButtonBuilder()
+                                    .setCustomId(`autorole_add_${messageId}`)
+                                    .setLabel('➕ Agregar botón de rol')
+                                    .setStyle(ButtonStyle.Success)
+                            )
+                        );
+                    }
+                }
+
+                try {
+                    const channel = await interaction.client.channels.fetch(config.channelId);
+                    const targetMessage = await channel.messages.fetch(messageId);
+                    await targetMessage.edit({ components: rows });
+                } catch (error) {
+                    console.error('Error actualizando el mensaje de auto-roles:', error);
+                }
+
+                return interaction.reply({
+                    content: `Botón agregado: ${emoji} → <@&${role.id}>`,
+                    ephemeral: true
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error manejando la interacción:', error);
+        if (interaction.isRepliable() && !interaction.replied && !interaction.deferred) {
+            await interaction
+                .reply({ content: 'Ocurrió un error al procesar esto.', ephemeral: true })
+                .catch(() => {});
+        }
+    }
+};
