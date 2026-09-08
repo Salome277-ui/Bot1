@@ -1,14 +1,24 @@
 const fs = require('fs');
 const path = require('path');
 
-const GIVEAWAYS_FILE = path.join(__dirname, 'giveaways.json');
-const CUSTOM_FILE = path.join(__dirname, 'customcommands.json');
-const WARNS_FILE = path.join(__dirname, 'warns.json');
-const ADMINS_FILE = path.join(__dirname, 'admins.json');
-const COUNTING_FILE = path.join(__dirname, 'counting.json');
-const AUTOROLES_FILE = path.join(__dirname, 'autoroles.json');
-const TICKETS_FILE = path.join(__dirname, 'tickets.json');
-const TICKET_COUNTER_FILE = path.join(__dirname, 'ticketcounter.json');
+// Si existe la variable DATA_DIR (Railway Volume), los archivos se
+// guardan ahí para que sobrevivan entre despliegues. Si no existe
+// (por ejemplo en local o en Replit), se usan los archivos normales
+// dentro de esta misma carpeta.
+const BASE_DIR = process.env.DATA_DIR || __dirname;
+
+if (!fs.existsSync(BASE_DIR)) {
+    fs.mkdirSync(BASE_DIR, { recursive: true });
+}
+
+const GIVEAWAYS_FILE = path.join(BASE_DIR, 'giveaways.json');
+const CUSTOM_FILE = path.join(BASE_DIR, 'customcommands.json');
+const WARNS_FILE = path.join(BASE_DIR, 'warns.json');
+const ADMINS_FILE = path.join(BASE_DIR, 'admins.json');
+const COUNTING_FILE = path.join(BASE_DIR, 'counting.json');
+const AUTOROLES_FILE = path.join(BASE_DIR, 'autoroles.json');
+const TICKETS_FILE = path.join(BASE_DIR, 'tickets.json');
+const TICKET_COUNTER_FILE = path.join(BASE_DIR, 'ticketcounter.json');
 
 function loadJSON(file) {
     if (!fs.existsSync(file)) return {};
