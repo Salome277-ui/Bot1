@@ -67,6 +67,12 @@ client.once("ready", async () => {
     }
 });
 
+client.on("guildCreate", async (guild) => {
+    console.log(`Entré a ${guild.name}`);
+
+    await configurarAutoMod(guild);
+});
+
     client.user.setPresence({
         activities: [
             {
