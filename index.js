@@ -3,6 +3,7 @@
 //  En Replit: pestaña "Secrets". En Railway: pestaña "Variables".
 //  Nombres: DISCORD_TOKEN y DISCORD_CLIENT_ID
 // ============================================================
+const { configurarAutoMod } = require("./automod");
 
 require('./keepalive');
 
@@ -58,8 +59,14 @@ async function registerCommands() {
     }
 }
 
-client.once('ready', async () => {
-    console.log(`✅ Bot conectado como ${client.user.tag}`);
+client.once("ready", async () => {
+    console.log(`Bot conectado como ${client.user.tag}`);
+
+    for (const guild of client.guilds.cache.values()) {
+        await configurarAutoMod(guild);
+    }
+});
+
     client.user.setPresence({
         activities: [
             {
