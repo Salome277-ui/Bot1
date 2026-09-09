@@ -11,10 +11,13 @@ const { parseEmoji } = require('../utils/emoji');
 
 const PANEL_DESCRIPTION = [
     '# <a:lazo:1533270880673595402> 𝗍іᥴkᥱ𝗍s꒱꒱ ⑅ .ᐟ'
+    
     ,
     '𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟'
+    
     ,
     '⪩⪨    :Toca uno de los botones de  acuerdo a tu situation.ᐟ<:Nurse:1523126016057413763>'
+    
     ,
     '𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟𓎟'
 ].join('\n');
