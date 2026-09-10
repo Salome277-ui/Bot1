@@ -24,7 +24,6 @@ const client = new Client({
     partials: [Partials.Message, Partials.Channel, Partials.Reaction]
 });
 
-// Cargar comandos
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs
@@ -36,21 +35,43 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-// Cargar eventos
 const interactionCreate = require('./events/interactionCreate');
 const messageCreate = require('./events/messageCreate');
 const messageReactionAdd = require('./events/messageReactionAdd');
 
-// Registrar automáticamente los comandos slash cada vez que el bot arranca
 async function registerCommands() {
     try {
         const commands = client.commands.map(command => command.data.toJSON());
         const rest = new REST({ version: '10' }).setToken(TOKEN);
-
         const route = GUILD_ID
             ? Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID)
             : Routes.applicationCommands(CLIENT_ID);
-
         await rest.put(route, { body: commands });
         console.log(`✅ ${commands.length} comandos registrados automáticamente.`);
-    } catch (err
+    } catch (error) {
+        console.error('❌ Error registrando comandos automáticamente:', error);
+    }
+}
+
+client.once('ready', async () => {
+    console.log(`✅ Bot conectado como ${client.user.tag}`);
+    client.user.setPresence({
+        activities: [
+            { name: 'Jugando Animal Hospital', type: ActivityType.Playing },
+            { name: 'Custom Status', state: '`/help` · El mejor bot de animal hospital 🏥', type: ActivityType.Custom }
+        ],
+        status: 'online'
+    });
+    await registerCommands();
+});
+
+client.on('interactionCreate', interaction => interactionCreate(client, interaction));
+client.on('messageCreate', message => messageCreate(client, message));
+client.on('messageReactionAdd', (reaction, user) => messageReactionAdd(client, reaction, user));
+
+if (!TOKEN || !CLIENT_ID) {
+    console.error('❌ Falta configurar DISCORD_TOKEN y DISCORD_CLIENT_ID como variables de entorno.');
+    process.exit(1);
+}
+
+client.login(TOKEN);
