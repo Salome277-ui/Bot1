@@ -9,12 +9,21 @@ module.exports = {
     adminOnly: true,
     data: new SlashCommandBuilder()
         .setName('embed')
-        .setDescription('Crea un embed personalizado'),
+        .setDescription('Crea un embed personalizado')
+        .addUserOption(option =>
+            option
+                .setName('mencionar')
+                .setDescription('Persona a la que quieres mencionar junto al embed (opcional)')
+                .setRequired(false)
+        ),
 
     async execute(interaction) {
+        const mentionUser = interaction.options.getUser('mencionar');
+        const mentionId = mentionUser ? mentionUser.id : 'none';
+
         const row = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
-                .setCustomId('embed_crear')
+                .setCustomId(`embed_crear_${mentionId}`)
                 .setLabel('Crear embed')
                 .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
