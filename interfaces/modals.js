@@ -5,9 +5,9 @@ const {
     ActionRowBuilder
 } = require('discord.js');
 
-function buildEmbedModal() {
+function buildEmbedModal(mentionId) {
     const modal = new ModalBuilder()
-        .setCustomId('embed_modal')
+        .setCustomId(`embed_modal_${mentionId || 'none'}`)
         .setTitle('Crear embed');
 
     const title = new TextInputBuilder()
