@@ -58,7 +58,7 @@ client.once('ready', async () => {
     client.user.setPresence({
         activities: [
             { name: 'Jugando Animal Hospital', type: ActivityType.Playing },
-            { name: 'Custom Status', state: '`/help` · El mejor bot de animal hospital 🏥', type: ActivityType.Custom }
+            { name: 'Custom Status', state: '/k-popers_forever!', type: ActivityType.Custom }
         ],
         status: 'online'
     });
