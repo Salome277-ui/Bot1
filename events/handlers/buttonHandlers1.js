@@ -6,8 +6,9 @@ const { PASTEL_RED, ZAPE_GIF, ZAPE_EMOJI } = require('../../data/constants');
 module.exports = async function buttonHandlers1(interaction) {
     const { customId } = interaction;
 
-    if (customId === 'embed_crear') {
-        await interaction.showModal(buildEmbedModal());
+    if (customId.startsWith('embed_crear_')) {
+        const mentionId = customId.replace('embed_crear_', '');
+        await interaction.showModal(buildEmbedModal(mentionId));
         return true;
     }
     if (customId === 'embed_cancelar') {
