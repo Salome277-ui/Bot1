@@ -12,7 +12,8 @@ function normalizeHex(value) {
 module.exports = async function modalHandlers1(interaction) {
     const { customId } = interaction;
 
-    if (customId === 'embed_modal') {
+    if (customId.startsWith('embed_modal_')) {
+        const mentionId = customId.replace('embed_modal_', '');
         const title = interaction.fields.getTextInputValue('embed_title');
         const text = interaction.fields.getTextInputValue('embed_text');
         const image = interaction.fields.getTextInputValue('embed_image');
@@ -31,7 +32,12 @@ module.exports = async function modalHandlers1(interaction) {
             embed.setColor('#5865F2');
         }
 
-        await interaction.reply({ embeds: [embed] });
+        const messagePayload = { embeds: [embed] };
+        if (mentionId !== 'none') {
+            messagePayload.content = `<@${mentionId}>`;
+        }
+
+        await interaction.reply(messagePayload);
         return true;
     }
 
