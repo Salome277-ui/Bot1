@@ -7,13 +7,15 @@ const {
 const { getCustomCommands, getCounting, saveCounting } = require('../data/storage');
 const { isBotAdminMember } = require('../utils/permissions');
 const { applyWarn } = require('../utils/warnHelper');
-const { PASTEL_RED, PASTEL_GREEN, WARN_EMOJI } = require('../data/constants');
 const { checkAfk } = require('../utils/afkCheck');
+const { PASTEL_RED, PASTEL_GREEN, WARN_EMOJI } = require('../data/constants');
 
 module.exports = async function messageCreate(client, message) {
     if (message.author.bot) return;
     if (!message.content) return;
     if (!message.guild) return;
+
+    await checkAfk(message);
 
     const rawContent = message.content.trim();
     const trigger = rawContent.toLowerCase();
