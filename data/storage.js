@@ -52,7 +52,7 @@ module.exports = {
     getTickets: () => loadJSON(TICKETS_FILE),
     saveTickets: (data) => saveJSON(TICKETS_FILE, data),
     getTicketCounter: () => loadJSON(TICKET_COUNTER_FILE),
-    saveTicketCounter: (data) => saveJSON(TICKET_COUNTER_FILE, data)
+    saveTicketCounter: (data) => saveJSON(TICKET_COUNTER_FILE, data),
     getAfk: () => loadJSON(AFK_FILE),
     saveAfk: (data) => saveJSON(AFK_FILE, data)
 };
