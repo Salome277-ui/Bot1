@@ -8,6 +8,7 @@ const { getCustomCommands, getCounting, saveCounting } = require('../data/storag
 const { isBotAdminMember } = require('../utils/permissions');
 const { applyWarn } = require('../utils/warnHelper');
 const { PASTEL_RED, PASTEL_GREEN, WARN_EMOJI } = require('../data/constants');
+const { checkAfk } = require('../utils/afkCheck');
 
 module.exports = async function messageCreate(client, message) {
     if (message.author.bot) return;
