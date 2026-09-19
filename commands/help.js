@@ -25,6 +25,7 @@ const COMMANDS_INFO = [
     { name: '/lock-channels', desc: '(Admin) Bloquea TODOS los canales de texto.' },
     { name: '/unlock-channels', desc: '(Admin) Desbloquea TODOS los canales de texto.' },
     { name: '/set-ticket', desc: '(Admin) Envía el panel de tickets a un canal.' },
+    { name: '/afk', desc: 'Establece tu estado afk :3.' },
     { name: '/help', desc: 'Muestra esta lista de comandos.' }
 ];
 
