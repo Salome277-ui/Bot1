@@ -19,6 +19,7 @@ const COUNTING_FILE = path.join(BASE_DIR, 'counting.json');
 const AUTOROLES_FILE = path.join(BASE_DIR, 'autoroles.json');
 const TICKETS_FILE = path.join(BASE_DIR, 'tickets.json');
 const TICKET_COUNTER_FILE = path.join(BASE_DIR, 'ticketcounter.json');
+const AFK_FILE = path.join(BASE_DIR, 'afk.json');
 
 function loadJSON(file) {
     if (!fs.existsSync(file)) return {};
