@@ -6,7 +6,6 @@ const {
 } = require('discord.js');
 
 module.exports = {
-    adminOnly: true,
     data: new SlashCommandBuilder()
         .setName('embed')
         .setDescription('Crea un embed personalizado')
